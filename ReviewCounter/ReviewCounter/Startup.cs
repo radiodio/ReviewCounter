@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ReviewCounter.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReviewCounter
 {
@@ -29,6 +31,9 @@ namespace ReviewCounter
         {
             // Add framework services.
             services.AddMvc();
+
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=ReviewCounterDb;Trusted_Connection=True;";
+            services.AddDbContext<ReviewCountingContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
