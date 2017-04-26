@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ReviewCounter.Models;
 
 namespace ReviewCounter.Models
 {
@@ -11,5 +12,8 @@ namespace ReviewCounter.Models
         public ReviewCountingContext(DbContextOptions<ReviewCountingContext> options)
             : base(options)
         { }
+        public DbSet<ReviewCounter.Models.Review> Review { get; set; }
+        public DbSet<ReviewCounter.Models.Member> Member { get; set; }
+        public DbSet<ReviewCounter.Models.Project> Project { get; set; }
     }
 }
