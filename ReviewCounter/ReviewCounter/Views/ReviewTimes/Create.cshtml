@@ -1,4 +1,4 @@
-@model ReviewCounter.Models.Project
+@model ReviewCounter.Models.ReviewTime
 
 @{
     ViewData["Title"] = "Create";
@@ -8,14 +8,14 @@
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>Project</h4>
+        <h4>ReviewTime</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="Time" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="Time" class="form-control" />
+                <span asp-validation-for="Time" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

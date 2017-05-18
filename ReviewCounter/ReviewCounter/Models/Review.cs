@@ -10,7 +10,6 @@ namespace ReviewCounter.Models
         public int ReviewId { get; set; }
         public Project Project { get; set; }
         public DateTime Date { get; set; }
-        public int Time { get; set; }
-        public string Memo { get; set; }
+        public Member Reviewee { get; set; }
     }
 }

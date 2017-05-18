@@ -9,22 +9,22 @@ using ReviewCounter.Models;
 
 namespace ReviewCounter.Controllers
 {
-    public class ProjectsController : Controller
+    public class ReviewTimesController : Controller
     {
         private readonly ReviewCountingContext _context;
 
-        public ProjectsController(ReviewCountingContext context)
+        public ReviewTimesController(ReviewCountingContext context)
         {
             _context = context;    
         }
 
-        // GET: Projects
+        // GET: ReviewTimes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Project.ToListAsync());
+            return View(await _context.ReviewTime.ToListAsync());
         }
 
-        // GET: Projects/Details/5
+        // GET: ReviewTimes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace ReviewCounter.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project
-                .SingleOrDefaultAsync(m => m.ProjectId == id);
-            if (project == null)
+            var reviewTime = await _context.ReviewTime
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (reviewTime == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(reviewTime);
         }
 
-        // GET: Projects/Create
+        // GET: ReviewTimes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
+        // POST: ReviewTimes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,Name")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Time")] ReviewTime reviewTime)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(project);
+                _context.Add(reviewTime);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return View(reviewTime);
         }
 
-        // GET: Projects/Edit/5
+        // GET: ReviewTimes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace ReviewCounter.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.ProjectId == id);
-            if (project == null)
+            var reviewTime = await _context.ReviewTime.SingleOrDefaultAsync(m => m.Id == id);
+            if (reviewTime == null)
             {
                 return NotFound();
             }
-            return View(project);
+            return View(reviewTime);
         }
 
-        // POST: Projects/Edit/5
+        // POST: ReviewTimes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Time")] ReviewTime reviewTime)
         {
-            if (id != project.ProjectId)
+            if (id != reviewTime.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace ReviewCounter.Controllers
             {
                 try
                 {
-                    _context.Update(project);
+                    _context.Update(reviewTime);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.ProjectId))
+                    if (!ReviewTimeExists(reviewTime.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace ReviewCounter.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(project);
+            return View(reviewTime);
         }
 
-        // GET: Projects/Delete/5
+        // GET: ReviewTimes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +123,30 @@ namespace ReviewCounter.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project
-                .SingleOrDefaultAsync(m => m.ProjectId == id);
-            if (project == null)
+            var reviewTime = await _context.ReviewTime
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (reviewTime == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(reviewTime);
         }
 
-        // POST: Projects/Delete/5
+        // POST: ReviewTimes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.ProjectId == id);
-            _context.Project.Remove(project);
+            var reviewTime = await _context.ReviewTime.SingleOrDefaultAsync(m => m.Id == id);
+            _context.ReviewTime.Remove(reviewTime);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ProjectExists(int id)
+        private bool ReviewTimeExists(int id)
         {
-            return _context.Project.Any(e => e.ProjectId == id);
+            return _context.ReviewTime.Any(e => e.Id == id);
         }
     }
 }

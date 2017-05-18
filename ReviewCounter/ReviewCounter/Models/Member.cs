@@ -8,7 +8,6 @@ namespace ReviewCounter.Models
     public class Member
     {
         public int MemberId { get; set; }
-        public string EmployeeNumber { get; set; }
         public string Name { get; set; }
     }
 }

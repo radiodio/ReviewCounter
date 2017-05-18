@@ -1,4 +1,4 @@
-@model ReviewCounter.Models.Project
+@model ReviewCounter.Models.ReviewTime
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,15 +8,15 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Project</h4>
+    <h4>ReviewTime</h4>
     <hr />
     <dl class="dl-horizontal">
-        <input type="hidden" asp-for="ProjectId" />
+        <input type="hidden" asp-for="Id" />
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Time)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Time)
         </dd>
     </dl>
     

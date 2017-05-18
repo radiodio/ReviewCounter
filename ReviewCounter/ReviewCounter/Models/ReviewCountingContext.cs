@@ -13,7 +13,8 @@ namespace ReviewCounter.Models
             : base(options)
         { }
         public DbSet<ReviewCounter.Models.Review> Review { get; set; }
-        public DbSet<ReviewCounter.Models.Member> Member { get; set; }
         public DbSet<ReviewCounter.Models.Project> Project { get; set; }
+        public DbSet<ReviewCounter.Models.Member> Member { get; set; }
+        public DbSet<ReviewCounter.Models.ReviewTime> ReviewTime { get; set; }
     }
 }

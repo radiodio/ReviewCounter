@@ -15,7 +15,6 @@ namespace ReviewCounter.Migrations
                 {
                     MemberId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmployeeNumber = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -29,19 +28,11 @@ namespace ReviewCounter.Migrations
                 {
                     ProjectId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    MemberId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    ProjectCode = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Project", x => x.ProjectId);
-                    table.ForeignKey(
-                        name: "FK_Project_Member_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "Member",
-                        principalColumn: "MemberId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,9 +42,8 @@ namespace ReviewCounter.Migrations
                     ReviewId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
-                    Memo = table.Column<string>(nullable: true),
                     ProjectId = table.Column<int>(nullable: true),
-                    Time = table.Column<int>(nullable: false)
+                    RevieweeMemberId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,21 +54,67 @@ namespace ReviewCounter.Migrations
                         principalTable: "Project",
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Review_Member_RevieweeMemberId",
+                        column: x => x.RevieweeMemberId,
+                        principalTable: "Member",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Project_MemberId",
-                table: "Project",
-                column: "MemberId");
+            migrationBuilder.CreateTable(
+                name: "ReviewTime",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MemberId = table.Column<int>(nullable: true),
+                    ReviewId = table.Column<int>(nullable: true),
+                    Time = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReviewTime", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReviewTime_Member_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Member",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ReviewTime_Review_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Review",
+                        principalColumn: "ReviewId",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ProjectId",
                 table: "Review",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_RevieweeMemberId",
+                table: "Review",
+                column: "RevieweeMemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewTime_MemberId",
+                table: "ReviewTime",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewTime_ReviewId",
+                table: "ReviewTime",
+                column: "ReviewId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ReviewTime");
+
             migrationBuilder.DropTable(
                 name: "Review");
 
