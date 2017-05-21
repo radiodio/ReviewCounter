@@ -1,4 +1,4 @@
-@model ReviewCounter.Models.Member
+@model ReviewCounter.Models.Output
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,15 +8,15 @@
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Member</h4>
+        <h4>Output</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="MemberId" />
+    <input type="hidden" asp-for="OutputId" />
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="ProcessOutput" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="ProcessOutput" class="form-control" />
+                <span asp-validation-for="ProcessOutput" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

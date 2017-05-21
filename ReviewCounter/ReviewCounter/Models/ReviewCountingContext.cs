@@ -16,5 +16,6 @@ namespace ReviewCounter.Models
         public DbSet<ReviewCounter.Models.Project> Project { get; set; }
         public DbSet<ReviewCounter.Models.Member> Member { get; set; }
         public DbSet<ReviewCounter.Models.ReviewTime> ReviewTime { get; set; }
+        public DbSet<ReviewCounter.Models.Output> Output { get; set; }
     }
 }

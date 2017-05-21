@@ -53,7 +53,7 @@ namespace ReviewCounter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Time")] ReviewTime reviewTime)
+        public async Task<IActionResult> Create([Bind("Id,Date,Time")] ReviewTime reviewTime)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace ReviewCounter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Time")] ReviewTime reviewTime)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,Time")] ReviewTime reviewTime)
         {
             if (id != reviewTime.Id)
             {
