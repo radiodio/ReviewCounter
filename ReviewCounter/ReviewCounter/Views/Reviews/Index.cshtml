@@ -15,9 +15,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Ticket)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.closed)
-                </th>
             <th></th>
         </tr>
     </thead>
@@ -26,9 +23,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Ticket)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.closed)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |

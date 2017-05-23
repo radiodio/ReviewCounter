@@ -23,6 +23,7 @@ namespace ReviewCounter.Controllers
             ViewData["Members"] = _context.Member.ToList();
             ViewData["Projects"] = _context.Project.ToList();
             ViewData["Outputs"] = _context.Output.ToList();
+            ViewData["Versions"] = _context.Version.ToList();
 
             return View();
         }
@@ -46,10 +47,12 @@ namespace ReviewCounter.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
+                // ReviewÇ™Ç†ÇÈÇ©ämîF
                 var project = _context.Project.Single(p => p.ProjectId == int.Parse(collection["project"]));
-                
+                var version = _context.Version.Single(p => p.ReleaseId == int.Parse(collection["version"]));
+                var output = _context.Output.Single(p => p.OutputId == int.Parse(collection["output"]));
+
+                // Ç»ÇØÇÍÇŒçÏÇÈ
 
                 return RedirectToAction("Index");
             }

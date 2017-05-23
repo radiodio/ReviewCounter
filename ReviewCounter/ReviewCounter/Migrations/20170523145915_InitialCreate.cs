@@ -49,20 +49,40 @@ namespace ReviewCounter.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Version",
+                columns: table => new
+                {
+                    ReleaseId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Closed = table.Column<bool>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Version", x => x.ReleaseId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Review",
                 columns: table => new
                 {
                     ReviewId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuthorMemberId = table.Column<int>(nullable: true),
                     OutputId = table.Column<int>(nullable: true),
                     ProjectId = table.Column<int>(nullable: true),
-                    RevieweeMemberId = table.Column<int>(nullable: true),
                     Ticket = table.Column<int>(nullable: false),
-                    closed = table.Column<bool>(nullable: false)
+                    VersionReleaseId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Review", x => x.ReviewId);
+                    table.ForeignKey(
+                        name: "FK_Review_Member_AuthorMemberId",
+                        column: x => x.AuthorMemberId,
+                        principalTable: "Member",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Review_Output_OutputId",
                         column: x => x.OutputId,
@@ -76,10 +96,10 @@ namespace ReviewCounter.Migrations
                         principalColumn: "ProjectId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Review_Member_RevieweeMemberId",
-                        column: x => x.RevieweeMemberId,
-                        principalTable: "Member",
-                        principalColumn: "MemberId",
+                        name: "FK_Review_Version_VersionReleaseId",
+                        column: x => x.VersionReleaseId,
+                        principalTable: "Version",
+                        principalColumn: "ReleaseId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -90,26 +110,31 @@ namespace ReviewCounter.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
+                    MemberId = table.Column<int>(nullable: true),
                     ReviewId = table.Column<int>(nullable: true),
-                    ReviewerMemberId = table.Column<int>(nullable: true),
                     Time = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReviewTime", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_ReviewTime_Member_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Member",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_ReviewTime_Review_ReviewId",
                         column: x => x.ReviewId,
                         principalTable: "Review",
                         principalColumn: "ReviewId",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ReviewTime_Member_ReviewerMemberId",
-                        column: x => x.ReviewerMemberId,
-                        principalTable: "Member",
-                        principalColumn: "MemberId",
-                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_AuthorMemberId",
+                table: "Review",
+                column: "AuthorMemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_OutputId",
@@ -122,19 +147,19 @@ namespace ReviewCounter.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_RevieweeMemberId",
+                name: "IX_Review_VersionReleaseId",
                 table: "Review",
-                column: "RevieweeMemberId");
+                column: "VersionReleaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewTime_MemberId",
+                table: "ReviewTime",
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewTime_ReviewId",
                 table: "ReviewTime",
                 column: "ReviewId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReviewTime_ReviewerMemberId",
-                table: "ReviewTime",
-                column: "ReviewerMemberId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -146,13 +171,16 @@ namespace ReviewCounter.Migrations
                 name: "Review");
 
             migrationBuilder.DropTable(
+                name: "Member");
+
+            migrationBuilder.DropTable(
                 name: "Output");
 
             migrationBuilder.DropTable(
                 name: "Project");
 
             migrationBuilder.DropTable(
-                name: "Member");
+                name: "Version");
         }
     }
 }

@@ -52,28 +52,44 @@ namespace ReviewCounter.Migrations
                     b.ToTable("Project");
                 });
 
+            modelBuilder.Entity("ReviewCounter.Models.Release", b =>
+                {
+                    b.Property<int>("ReleaseId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Closed");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ReleaseId");
+
+                    b.ToTable("Version");
+                });
+
             modelBuilder.Entity("ReviewCounter.Models.Review", b =>
                 {
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AuthorMemberId");
+
                     b.Property<int?>("OutputId");
 
                     b.Property<int?>("ProjectId");
 
-                    b.Property<int?>("RevieweeMemberId");
-
                     b.Property<int>("Ticket");
 
-                    b.Property<bool>("closed");
+                    b.Property<int?>("VersionReleaseId");
 
                     b.HasKey("ReviewId");
+
+                    b.HasIndex("AuthorMemberId");
 
                     b.HasIndex("OutputId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("RevieweeMemberId");
+                    b.HasIndex("VersionReleaseId");
 
                     b.ToTable("Review");
                 });
@@ -85,23 +101,27 @@ namespace ReviewCounter.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int?>("ReviewId");
+                    b.Property<int?>("MemberId");
 
-                    b.Property<int?>("ReviewerMemberId");
+                    b.Property<int?>("ReviewId");
 
                     b.Property<int>("Time");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReviewId");
+                    b.HasIndex("MemberId");
 
-                    b.HasIndex("ReviewerMemberId");
+                    b.HasIndex("ReviewId");
 
                     b.ToTable("ReviewTime");
                 });
 
             modelBuilder.Entity("ReviewCounter.Models.Review", b =>
                 {
+                    b.HasOne("ReviewCounter.Models.Member", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorMemberId");
+
                     b.HasOne("ReviewCounter.Models.Output", "Output")
                         .WithMany()
                         .HasForeignKey("OutputId");
@@ -110,20 +130,20 @@ namespace ReviewCounter.Migrations
                         .WithMany()
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("ReviewCounter.Models.Member", "Reviewee")
+                    b.HasOne("ReviewCounter.Models.Release", "Version")
                         .WithMany()
-                        .HasForeignKey("RevieweeMemberId");
+                        .HasForeignKey("VersionReleaseId");
                 });
 
             modelBuilder.Entity("ReviewCounter.Models.ReviewTime", b =>
                 {
+                    b.HasOne("ReviewCounter.Models.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId");
+
                     b.HasOne("ReviewCounter.Models.Review", "Review")
                         .WithMany()
                         .HasForeignKey("ReviewId");
-
-                    b.HasOne("ReviewCounter.Models.Member", "Reviewer")
-                        .WithMany()
-                        .HasForeignKey("ReviewerMemberId");
                 });
         }
     }

@@ -9,9 +9,9 @@ namespace ReviewCounter.Models
     {
         public int ReviewId { get; set; }
         public Project Project { get; set; }
+        public Release Version { get; set; }
         public int Ticket { get; set; }
         public Output Output { get; set; }
-        public Member Reviewee { get; set; }
-        public bool closed { get; set; }
+        public Member Author { get; set; }
     }
 }

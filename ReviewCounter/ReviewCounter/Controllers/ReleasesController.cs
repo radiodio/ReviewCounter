@@ -9,22 +9,22 @@ using ReviewCounter.Models;
 
 namespace ReviewCounter.Controllers
 {
-    public class ReviewsController : Controller
+    public class ReleasesController : Controller
     {
         private readonly ReviewCountingContext _context;
 
-        public ReviewsController(ReviewCountingContext context)
+        public ReleasesController(ReviewCountingContext context)
         {
             _context = context;    
         }
 
-        // GET: Reviews
+        // GET: Releases
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Review.ToListAsync());
+            return View(await _context.Version.ToListAsync());
         }
 
-        // GET: Reviews/Details/5
+        // GET: Releases/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace ReviewCounter.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review
-                .SingleOrDefaultAsync(m => m.ReviewId == id);
-            if (review == null)
+            var release = await _context.Version
+                .SingleOrDefaultAsync(m => m.ReleaseId == id);
+            if (release == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            return View(release);
         }
 
-        // GET: Reviews/Create
+        // GET: Releases/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Reviews/Create
+        // POST: Releases/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReviewId,Ticket")] Review review)
+        public async Task<IActionResult> Create([Bind("ReleaseId,Name,Closed")] Release release)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(review);
+                _context.Add(release);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(review);
+            return View(release);
         }
 
-        // GET: Reviews/Edit/5
+        // GET: Releases/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace ReviewCounter.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == id);
-            if (review == null)
+            var release = await _context.Version.SingleOrDefaultAsync(m => m.ReleaseId == id);
+            if (release == null)
             {
                 return NotFound();
             }
-            return View(review);
+            return View(release);
         }
 
-        // POST: Reviews/Edit/5
+        // POST: Releases/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReviewId,Ticket")] Review review)
+        public async Task<IActionResult> Edit(int id, [Bind("ReleaseId,Name,Closed")] Release release)
         {
-            if (id != review.ReviewId)
+            if (id != release.ReleaseId)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace ReviewCounter.Controllers
             {
                 try
                 {
-                    _context.Update(review);
+                    _context.Update(release);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReviewExists(review.ReviewId))
+                    if (!ReleaseExists(release.ReleaseId))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace ReviewCounter.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(review);
+            return View(release);
         }
 
-        // GET: Reviews/Delete/5
+        // GET: Releases/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +123,30 @@ namespace ReviewCounter.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Review
-                .SingleOrDefaultAsync(m => m.ReviewId == id);
-            if (review == null)
+            var release = await _context.Version
+                .SingleOrDefaultAsync(m => m.ReleaseId == id);
+            if (release == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            return View(release);
         }
 
-        // POST: Reviews/Delete/5
+        // POST: Releases/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == id);
-            _context.Review.Remove(review);
+            var release = await _context.Version.SingleOrDefaultAsync(m => m.ReleaseId == id);
+            _context.Version.Remove(release);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ReviewExists(int id)
+        private bool ReleaseExists(int id)
         {
-            return _context.Review.Any(e => e.ReviewId == id);
+            return _context.Version.Any(e => e.ReleaseId == id);
         }
     }
 }

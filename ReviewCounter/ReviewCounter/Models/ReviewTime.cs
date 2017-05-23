@@ -9,7 +9,7 @@ namespace ReviewCounter.Models
     {
         public int Id { get; set; }
         public Review Review { get; set; }
-        public Member Reviewer { get; set; }
+        public Member Member { get; set; }
         public DateTime Date { get; set; }
         public int Time { get; set; }
     }
