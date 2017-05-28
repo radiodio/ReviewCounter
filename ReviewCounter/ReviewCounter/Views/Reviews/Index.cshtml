@@ -12,17 +12,40 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Ticket)
-                </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project);
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Version);
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ticket);
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Output);
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author);
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Project.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Version.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Ticket)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Output.ProcessOutput)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReviewCounter.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ReviewCounter.Controllers
 {
@@ -21,7 +22,12 @@ namespace ReviewCounter.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Review.ToListAsync());
+            return View(await _context.Review
+                .Include(r=> r.Project)
+                .Include(r=> r.Version)
+                .Include(r=> r.Output)
+                .Include(r=> r.Author)
+                .ToListAsync());
         }
 
         // GET: Reviews/Details/5
@@ -45,23 +51,57 @@ namespace ReviewCounter.Controllers
         // GET: Reviews/Create
         public IActionResult Create()
         {
+            ViewData["Members"] = _context.Member.ToList();
+            ViewData["Projects"] = _context.Project.ToList();
+            ViewData["Outputs"] = _context.Output.ToList();
+            ViewData["Versions"] = _context.Version.ToList();
+
             return View();
         }
 
         // POST: Reviews/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReviewId,Ticket")] Review review)
+        public ActionResult Create(IFormCollection collection)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(review);
-                await _context.SaveChangesAsync();
+                // ReviewÇ™Ç†ÇÈÇ©ämîF
+                var project = _context.Project.Single(p => p.ProjectId == int.Parse(collection["project"]));
+                var version = _context.Version.Single(v => v.ReleaseId == int.Parse(collection["version"]));
+                var output = _context.Output.Single(o => o.OutputId == int.Parse(collection["output"]));
+                var review = _context.Review.Where(r => r.Project == project && r.Version == version && r.Output == output).ToArray();
+                if (review.Count() > 0)
+                {
+                    ViewData["message"] = "Ç∑Ç≈Ç…ReviewÇ™ë∂ç›ÇµÇ‹Ç∑ÅB";
+                    ViewData["Members"] = _context.Member.ToList();
+                    ViewData["Projects"] = _context.Project.ToList();
+                    ViewData["Outputs"] = _context.Output.ToList();
+                    ViewData["Versions"] = _context.Version.ToList();
+                    return View();
+                }
+
+                var ticket = int.Parse(collection["ticket"]);
+                var author = _context.Member.SingleOrDefault(m => m.MemberId == int.Parse(collection["author"]));
+
+                // Ç»Ç¢ÇÃÇ≈çÏê¨
+                _context.Review.Add(new Review
+                    {
+                        Project = project,
+                        Version = version,
+                        Ticket = ticket,
+                        Output = output,
+                        Author = author
+                    });
+                _context.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            return View(review);
+            catch (Exception e)
+            {
+                ViewData["message"] = "";
+                return View();
+            }
         }
 
         // GET: Reviews/Edit/5
