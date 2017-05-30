@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReviewCounter.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ReviewCounter.Controllers
 {
@@ -21,7 +22,12 @@ namespace ReviewCounter.Controllers
         // GET: ReviewTimes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ReviewTime.ToListAsync());
+            return View(await _context.Review
+                                .Include(r=> r.Project)
+                                .Include(r => r.Version)
+                                .Include(r => r.Output)
+                                .Include(r => r.Author)
+                                .ToListAsync());
         }
 
         // GET: ReviewTimes/Details/5
@@ -43,8 +49,10 @@ namespace ReviewCounter.Controllers
         }
 
         // GET: ReviewTimes/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+            ViewBag.ReviewId = id;
+            ViewBag.Members = _context.Member.ToList();
             return View();
         }
 
@@ -53,15 +61,37 @@ namespace ReviewCounter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,Time")] ReviewTime reviewTime)
+        public async Task<IActionResult> Create(IFormCollection collection)
         {
-            if (ModelState.IsValid)
+            int reviewId;
+            if (!int.TryParse(collection["reviewId"], out reviewId))
             {
-                _context.Add(reviewTime);
-                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(reviewTime);
+
+            try
+            {
+                var review = _context.Review.SingleOrDefault(r => r.ReviewId == int.Parse(collection["reviewId"]));
+                var member = _context.Member.SingleOrDefault(m => m.MemberId == int.Parse(collection["member"]));
+                var dateTime = DateTime.Parse(collection["date"]);
+                var time = int.Parse(collection["time"]);
+                _context.ReviewTime.Add(new ReviewTime
+                {
+                    Review = review,
+                    Member = member,
+                    Date = dateTime,
+                    Time = time
+                });
+                _context.SaveChanges();
+
+                TempData["message"] = "éûä‘í«â¡Ç…ê¨å˜";
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                TempData["message"] = "éûä‘í«â¡Ç…é∏îs";
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: ReviewTimes/Edit/5
