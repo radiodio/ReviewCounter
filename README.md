@@ -4,8 +4,9 @@
 * Windows
 * Visual Studio 2017
 ### EntityFrameworkCoreでマイグレーションする準備
+ReviewCounter.csproj 
 
-```xml:ReviewCounter.csproj
+``` xml:ReviewCounter.csproj
 <ItemGroup>
   <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
@@ -13,6 +14,7 @@
 ```
 
 ### マイグレーション
+PowerShell
 
 ```shell
 cd {プロジェクトルート}  #ReviewCounter.csprojの階層
@@ -36,7 +38,11 @@ sudo ln -s /opt/dotnet/dotnet /usr/local/bin
 * インターネット環境
 
 ```shell
-$ dotnet restore
-$ dotnet publish
-$ dotnet run
+dotnet restore
+dotnet publish
+dotnet run
 ```
+
+### Apache 経由でネットワークから接続
+
+## IIS10.0 のアプリケーションプール上で動かす
