@@ -15,8 +15,12 @@ dotnet ef database remove
 ```
 
 ### 開発環境
-1. git clone
+1. git clone https://github.com/radiodio/ReviewCounter.git
 1. パッケージマネージャコンソールで `Update-Database` コマンド実行
+
+### 注意点
+Visual StudioでViewファイルに日本語を入力して保存するとエンコードがS-JISになってしまった。
+正しい対処法が分からないので、テキストエディターでそのファイルを開いて、UTF-8で保存しなおした。
 
 ## CentOS7.2 で動かす
 ### 前提
@@ -47,10 +51,8 @@ dotnet run
 /etc/httpd/conf.d
 
 ```
-#
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
-#
 
 <Location />
  ProxyPass http://localhost:5000/
