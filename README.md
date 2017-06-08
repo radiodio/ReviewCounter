@@ -3,16 +3,6 @@
 ## 開発
 * Windows
 * Visual Studio 2017
-### EntityFrameworkCoreでマイグレーションする準備
-ReviewCounter.csproj 
-
-``` xml:ReviewCounter.csproj
-<ItemGroup>
-  <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
-  <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
-</ItemGroup>
-```
-
 ### マイグレーション
 PowerShell
 
@@ -23,6 +13,10 @@ dotnet ef database update
 dotnet ef database drop
 dotnet ef database remove
 ```
+
+### 開発環境
+1. git clone
+1. パッケージマネージャコンソールで `Update-Database` コマンド実行
 
 ## CentOS7.2 で動かす
 ### dotnetインストール
