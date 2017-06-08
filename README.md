@@ -19,6 +19,11 @@ dotnet ef database remove
 1. パッケージマネージャコンソールで `Update-Database` コマンド実行
 
 ## CentOS7.2 で動かす
+### 前提
+* インターネット環境（firewallも確認）
+* Git
+* Apache (+ mod_proxy)
+
 ### dotnetインストール
 
 ```shell
@@ -29,14 +34,27 @@ sudo ln -s /opt/dotnet/dotnet /usr/local/bin
 ```
 
 ### ビルドして実行
-* インターネット環境
 
 ```shell
+git clone https://github.com/radiodio/ReviewCounter.git
+cd ReviewCounter
 dotnet restore
 dotnet publish
 dotnet run
 ```
 
 ### Apache 経由でネットワークから接続
+/etc/httpd/conf.d
+
+```
+#
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+#
+
+<Location />
+ ProxyPass http://localhost:5000/
+</Location>
+```
 
 ## IIS10.0 のアプリケーションプール上で動かす
