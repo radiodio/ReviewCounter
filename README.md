@@ -70,4 +70,6 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
 ### デプロイ手順
 1. 発行(publish)
 1. IISマネージャでアプリケーションを追加
+1. アクセス許可を付与
+    * publishフォルダに読み取り実行権限を、コンピューター名\IIS_IUSRS に与える。
 1. IISマネージャでサイトを再起動
