@@ -34,7 +34,7 @@ namespace ReviewCounter
             // Add framework services.
             services.AddMvc();
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=ReviewCounterDb;Trusted_Connection=True;";
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=ReviewCounterDb;";
             services.AddDbContext<ReviewCountingContext>(options => options.UseSqlServer(connection));
         }
 
