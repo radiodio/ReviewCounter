@@ -1,4 +1,4 @@
-# .NET Core を CentOS7.2 と IIS10.0 のアプリケーションプール上で動かす
+# .NET Core を マルチプラットフォームで動かす
 
 ## 開発
 * Windows
@@ -43,7 +43,7 @@ sudo ln -s /opt/dotnet/dotnet /usr/local/bin
 git clone https://github.com/radiodio/ReviewCounter.git
 cd ReviewCounter
 dotnet restore
-dotnet publish
+# dotnet publish
 dotnet run
 ```
 
