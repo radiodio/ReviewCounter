@@ -60,3 +60,14 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
 ```
 
 ## IIS10.0 のアプリケーションプール上で動かす
+
+* [公式サイト](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis) 参照
+
+### 実行環境
+* IIS10.0
+* .NET Core Windows Server Hosting
+
+### デプロイ手順
+1. 発行(publish)
+1. IISマネージャでアプリケーションを追加
+1. IISマネージャでサイトを再起動
