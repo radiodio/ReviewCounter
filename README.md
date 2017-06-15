@@ -26,6 +26,7 @@ Visual StudioでViewファイルに日本語を入力して保存するとエン
 ### 前提
 * インターネット環境（firewallも確認）
 * Git
+* SQL Server
 * Apache (+ mod_proxy)
 
 ### dotnetインストール
