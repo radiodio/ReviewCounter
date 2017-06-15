@@ -23,7 +23,7 @@ Visual StudioでViewファイルに日本語を入力して保存するとエン
 正しい対処法が分からないので、テキストエディターでそのファイルを開いて、UTF-8で保存しなおした。
 
 ## CentOS7.2 で動かす
-### 前提
+### 実行環境
 * インターネット環境（firewallも確認）
 * Git
 * SQL Server
@@ -67,6 +67,7 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
 ### 実行環境
 * IIS10.0
 * .NET Core Windows Server Hosting
+* Git
 
 ### デプロイ手順
 1. 発行(publish)
