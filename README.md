@@ -48,6 +48,24 @@ dotnet restore
 dotnet run
 ```
 
+### Dockerインストール
+```
+su
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum-config-manager --enable docker-ce-edge
+yum makecache fast
+yum install -y docker-ce
+mkdir /etc/docker
+cat <<_E > /etc/docker/daemon.json
+{
+  "storage-driver": "devicemapper"
+}
+_E
+curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+```
+
 ### Apache 経由でネットワークから接続
 /etc/httpd/conf.d
 
