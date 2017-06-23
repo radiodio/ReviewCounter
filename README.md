@@ -32,7 +32,7 @@ Visual StudioでViewファイルに日本語を入力して保存するとエン
 ### dotnetインストール
 
 ```shell
-sudo yum install libunwind libicu
+sudo yum install -y libunwind libicu
 curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?linkid=848821
 sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
 sudo ln -s /opt/dotnet/dotnet /usr/local/bin
@@ -42,7 +42,7 @@ sudo ln -s /opt/dotnet/dotnet /usr/local/bin
 
 ```shell
 git clone https://github.com/radiodio/ReviewCounter.git
-cd ReviewCounter
+cd ReviewCounter/ReviewCounter/ReviewCounter/
 dotnet restore
 # dotnet publish
 dotnet run
