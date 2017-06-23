@@ -51,6 +51,7 @@ chmod +x /usr/local/bin/docker-compose
 
 ### SQL Server起動 on Docker
 ```
+sudo systemctl docker start
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Mickey_Mouse_123' -p 1433:1433 -d microsoft/mssql-server-linux
 ```
 
@@ -73,7 +74,7 @@ dotnet restore
 dotnet run
 ```
 
-### Apache 経由でネットワークから接続
+### Apache 経由での接続
 /etc/httpd/conf.d
 
 ```
