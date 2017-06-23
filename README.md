@@ -1,22 +1,23 @@
 # .NET Core を マルチプラットフォームで動かす
 
-## 開発
+## 開発環境
 * Windows
 * Visual Studio 2017
+
+### セッティング
+1. git clone https://github.com/radiodio/ReviewCounter.git
+1. パッケージマネージャコンソールで `Update-Database` コマンド実行
+
 ### マイグレーション
 PowerShell
 
 ```shell
-cd {プロジェクトルート}  #ReviewCounter.csprojの階層
+cd ReviewCounter/ReviewCounter/ReviewCounter/  #ReviewCounter.csprojの階層
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 dotnet ef database drop
 dotnet ef database remove
 ```
-
-### 開発環境
-1. git clone https://github.com/radiodio/ReviewCounter.git
-1. パッケージマネージャコンソールで `Update-Database` コマンド実行
 
 ### 注意点
 Visual StudioでViewファイルに日本語を入力して保存するとエンコードがS-JISになってしまった。
@@ -24,29 +25,11 @@ Visual StudioでViewファイルに日本語を入力して保存するとエン
 
 ## CentOS7.2 で動かす
 ### 実行環境
-* インターネット環境（firewallも確認）
+* インターネット環境
+* dotnet
 * Git
 * SQL Server
 * Apache (+ mod_proxy)
-
-### dotnetインストール
-
-```shell
-sudo yum install -y libunwind libicu
-curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?linkid=848821
-sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
-sudo ln -s /opt/dotnet/dotnet /usr/local/bin
-```
-
-### ビルドして実行
-
-```shell
-git clone https://github.com/radiodio/ReviewCounter.git
-cd ReviewCounter/ReviewCounter/ReviewCounter/
-dotnet restore
-# dotnet publish
-dotnet run
-```
 
 ### Dockerインストール
 ```
@@ -64,6 +47,30 @@ cat <<_E > /etc/docker/daemon.json
 _E
 curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
+```
+
+### SQL Server起動 on Docker
+```
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Mickey_Mouse_123' -p 1433:1433 -d microsoft/mssql-server-linux
+```
+
+### dotnetインストール
+
+```shell
+sudo yum install -y libunwind libicu
+curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?linkid=848821
+sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
+sudo ln -s /opt/dotnet/dotnet /usr/local/bin
+```
+
+### アプリをビルドして実行
+
+```shell
+git clone https://github.com/radiodio/ReviewCounter.git
+cd ReviewCounter/ReviewCounter/ReviewCounter/
+dotnet restore
+# dotnet publish
+dotnet run
 ```
 
 ### Apache 経由でネットワークから接続
