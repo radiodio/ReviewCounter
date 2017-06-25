@@ -7,6 +7,10 @@
 ### セッティング
 1. git clone https://github.com/radiodio/ReviewCounter.git
 1. パッケージマネージャコンソールで `Update-Database` コマンド実行
+1. StartUp.cs の connectionString を変更
+```
+var connection = @"Server=(localdb)\mssqllocaldb;Database=ReviewCounterDb;";
+```
 
 ### マイグレーション
 PowerShell
