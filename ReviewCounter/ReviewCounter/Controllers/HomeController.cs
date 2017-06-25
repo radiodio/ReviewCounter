@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReviewCounter.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.IO;
 
 namespace ReviewCounter.Controllers
 {
@@ -26,6 +30,7 @@ namespace ReviewCounter.Controllers
                                 .Include(rt => rt.Review.Output)
                                 .Include(rt => rt.Review.Author)
                                 .Include(rt => rt.Member)
+                                .Where(rt => rt.Review.Version.Closed == false)
                                 .OrderBy(rt => rt.Review.Project)
                                 .ThenBy(rt => rt.Review.Version)
                                 .ThenBy(rt => rt.Review.Output)
@@ -52,6 +57,48 @@ namespace ReviewCounter.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        public FileResult Download()
+        {
+            string path = "review.csv";
+            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read, 4096, FileOptions.SequentialScan))
+            using (var streamWriter = new StreamWriter(stream, System.Text.Encoding.UTF8, 1024, false))
+            {
+                 var list = CsvRecord.ConvertToCsvRecord
+                    (_context.ReviewTime
+                                .Include(rt => rt.Review)
+                                .Include(rt => rt.Review.Project)
+                                .Include(rt => rt.Review.Version)
+                                .Include(rt => rt.Review.Output)
+                                .Include(rt => rt.Review.Author)
+                                .Include(rt => rt.Member)
+                                .Where(rt => rt.Review.Version.Closed == false)
+                                .OrderBy(rt => rt.Review.Project)
+                                .ThenBy(rt => rt.Review.Version)
+                                .ThenBy(rt => rt.Review.Output)
+                                .ThenBy(rt => rt.Review.Author)
+                                .ThenBy(rt => rt.Member)
+                                .ThenBy(rt => rt.Date)
+                                .ToList()
+                    );
+
+                streamWriter.WriteLine("Project,Version,Backlog,ProcessOutput,Reviewee,Reviewer,Date,Time");
+
+                foreach (var item in list)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(item.Version).Append(",")
+                        .Append(item.Backlog).Append(",")
+                        .Append(item.ProcessOutput).Append(",")
+                        .Append(item.Reviewee).Append(",")
+                        .Append(item.Reviewer).Append(",")
+                        .Append(item.Date).Append(",").Append(item.Time);
+                    streamWriter.WriteLine(sb.ToString());    
+                }
+            }
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            return File(fileBytes, "application/x-msdownload", path);
         }
     }
 }
