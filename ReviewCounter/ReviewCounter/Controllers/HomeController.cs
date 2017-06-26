@@ -18,6 +18,7 @@ namespace ReviewCounter.Controllers
 
         public HomeController(ReviewCountingContext context)
         {
+
             _context = context;
         }
 
@@ -40,7 +41,7 @@ namespace ReviewCounter.Controllers
                                 .ToListAsync());
         }
 
-        public IActionResult About()
+        public IActionResult Amount()
         {
             ViewData["Message"] = "Your application description page.";
 
@@ -59,30 +60,37 @@ namespace ReviewCounter.Controllers
             return View();
         }
 
-        public FileResult Download()
+        public FileResult DownloadIndex()
+        {
+            var list = CsvRecord.ConvertToCsvRecord
+                       (_context.ReviewTime
+                                   .Include(rt => rt.Review)
+                                   .Include(rt => rt.Review.Project)
+                                   .Include(rt => rt.Review.Version)
+                                   .Include(rt => rt.Review.Output)
+                                   .Include(rt => rt.Review.Author)
+                                   .Include(rt => rt.Member)
+                                   .Where(rt => rt.Review.Version.Closed == false)
+                                   .OrderBy(rt => rt.Review.Project)
+                                   .ThenBy(rt => rt.Review.Version)
+                                   .ThenBy(rt => rt.Review.Output)
+                                   .ThenBy(rt => rt.Review.Author)
+                                   .ThenBy(rt => rt.Member)
+                                   .ThenBy(rt => rt.Date)
+                                   .ToList()
+                       );
+            return Download(list);
+        }
+
+
+        // public DownloadAmount
+
+        private FileResult Download(List<CsvRecord> list)
         {
             string path = "review.csv";
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read, 4096, FileOptions.SequentialScan))
             using (var streamWriter = new StreamWriter(stream, System.Text.Encoding.UTF8, 1024, false))
             {
-                 var list = CsvRecord.ConvertToCsvRecord
-                    (_context.ReviewTime
-                                .Include(rt => rt.Review)
-                                .Include(rt => rt.Review.Project)
-                                .Include(rt => rt.Review.Version)
-                                .Include(rt => rt.Review.Output)
-                                .Include(rt => rt.Review.Author)
-                                .Include(rt => rt.Member)
-                                .Where(rt => rt.Review.Version.Closed == false)
-                                .OrderBy(rt => rt.Review.Project)
-                                .ThenBy(rt => rt.Review.Version)
-                                .ThenBy(rt => rt.Review.Output)
-                                .ThenBy(rt => rt.Review.Author)
-                                .ThenBy(rt => rt.Member)
-                                .ThenBy(rt => rt.Date)
-                                .ToList()
-                    );
-
                 streamWriter.WriteLine("Project,Version,Backlog,ProcessOutput,Reviewee,Reviewer,Date,Time");
 
                 foreach (var item in list)
