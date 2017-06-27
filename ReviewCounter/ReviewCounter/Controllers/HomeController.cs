@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReviewCounter.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
 
@@ -41,23 +39,68 @@ namespace ReviewCounter.Controllers
                                 .ToListAsync());
         }
 
-        public IActionResult Amount()
+        public IActionResult Amount(DateTime? month, int? projectId)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            if (month == null || projectId == null)
+            {
+                ViewBag.Projects = _context.Project.ToList();
+                return View("Monthly");
+            }
+            ViewBag.Month = (DateTime)month;
+            ViewBag.ProjectId = (int)projectId;
+            var from = (DateTime)month;
+            var to = from.AddMonths(1).AddDays(-1.0);
+            var list = _context.ReviewTime.Include(rt => rt.Review)
+                                          .Include(rt => rt.Review.Project)
+                                          .Include(rt => rt.Review.Version)
+                                          .Include(rt => rt.Review.Output)
+                                          .Include(rt => rt.Review.Author)
+                                          .Include(rt => rt.Member)
+                                          .Where(rt => rt.Review.Version.Closed == false)
+                                          .Where(rt => rt.Review.Project.ProjectId == (int)projectId)
+                                          .OrderBy(rt => rt.Review.Project)
+                                          .ThenBy(rt => rt.Review.Version)
+                                          .ThenBy(rt => rt.Review.Output)
+                                          .ThenBy(rt => rt.Review.Author)
+                                          .ThenBy(rt => rt.Member)
+                                          .ThenBy(rt => rt.Date)
+                                          .Where(rt => rt.Date >= from)
+                                          .Where(rt => rt.Date <= to)
+                                          .ToList();
+            return View(list);
         }
 
         public IActionResult Error()
         {
             return View();
+        }
+
+        public FileResult DownloadAmount(DateTime? month, int? projectId)
+        {
+            if (month == null || projectId == null) { throw new FileNotFoundException(); }
+            var from = (DateTime)month;
+            var to = from.AddMonths(1).AddDays(-1.0);
+            var list = CsvRecord.ConvertToCsvRecord
+                       (_context.ReviewTime
+                                .Include(rt => rt.Review)
+                                .Include(rt => rt.Review.Project)
+                                .Include(rt => rt.Review.Version)
+                                .Include(rt => rt.Review.Output)
+                                .Include(rt => rt.Review.Author)
+                                .Include(rt => rt.Member)
+                                .Where(rt => rt.Review.Version.Closed == false)
+                                .Where(rt => rt.Review.Project.ProjectId == (int)projectId)
+                                .OrderBy(rt => rt.Review.Project)
+                                .ThenBy(rt => rt.Review.Version)
+                                .ThenBy(rt => rt.Review.Output)
+                                .ThenBy(rt => rt.Review.Author)
+                                .ThenBy(rt => rt.Member)
+                                .ThenBy(rt => rt.Date)
+                                .Where(rt => rt.Date >= from)
+                                .Where(rt => rt.Date <= to)
+                                .ToList()
+                       );
+            return Download(list);
         }
 
         public FileResult DownloadIndex()
@@ -81,9 +124,6 @@ namespace ReviewCounter.Controllers
                        );
             return Download(list);
         }
-
-
-        // public DownloadAmount
 
         private FileResult Download(List<CsvRecord> list)
         {

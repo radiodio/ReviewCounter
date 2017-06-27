@@ -1,7 +1,76 @@
-﻿@{
-    ViewData["Title"] = "About";
-}
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+﻿@model IEnumerable<ReviewCounter.Models.ReviewTime>
 
-<p>Use this area to provide additional information.</p>
+@{
+    ViewData["Title"] = "Amount";
+}
+
+<h2>レビュー時間一覧</h2>
+
+<p>
+    @Html.ActionLink("追加", "Index", "ReviewTimes")
+    |
+    @Html.ActionLink("Download", "DownloadAmount", "Home", new { month = ViewBag.Month, projectId = ViewBag.ProjectId })
+</p>
+月合計時間(分)：@Model.Sum(x => x.Time)
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Review.Project.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Review.Version.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Review.Ticket)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Review.Output.ProcessOutput)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Review.Author.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Review.Project.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Review.Version.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Review.Ticket)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Review.Output.ProcessOutput)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Review.Author.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -11,6 +11,7 @@
     |
     @Html.ActionLink("Download", "DownloadIndex", "Home")
 </p>
+合計時間(分)：@Model.Sum(x => x.Time)
 <table class="table">
     <thead>
         <tr>
