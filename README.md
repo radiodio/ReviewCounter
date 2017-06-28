@@ -26,7 +26,7 @@ Visual StudioでViewファイルに日本語を入力して保存するとエン
 * インターネット環境必須
 * MSがSqlServerのDockerイメージを公開しているのでこれを使う。
 
-### Dockerインストール
+### Docker インストール
 ```
 su
 yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -44,13 +44,13 @@ curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compos
 chmod +x /usr/local/bin/docker-compose
 ```
 
-### SQL Serverを起動 on Docker
+### SQL Server を起動 on Docker
 ```
 sudo systemctl docker start
 docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Mickey_Mouse_123' -p 1433:1433 -d microsoft/mssql-server-linux
 ```
 
-### dotnetインストール
+### dotnet インストール
 
 ```shell
 sudo yum install -y libunwind libicu
@@ -71,9 +71,17 @@ dotnet run
 
 ## Windows 実行環境
 [環境(Wikki)](https://github.com/radiodio/ReviewCounter/wiki#windows)
-[公式サイト](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis) 参照
+
+### IIS 10.0 インストール
+[公式](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis) を参照
+
+### SQL Server 2016 Express インストール
+
 
 ### デプロイ手順
+1. `git clone https://github.com/radiodio/ReviewCounter.git`
+1. StartUp.cs :37 の connectionString を変更  
+`var connection = @"";`
 1. 発行(publish)    
    > Visual Studio からでOK
 1. IISマネージャでアプリケーションを追加
