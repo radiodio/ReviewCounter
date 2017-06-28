@@ -76,7 +76,10 @@ dotnet run
 [公式](https://docs.microsoft.com/en-us/aspnet/core/publishing/iis) を参照
 
 ### SQL Server 2016 Express インストール
-
+割愛いたします。  
+検索すると簡単にキャプチャつきの説明が見つかります。  
+ですが、Windows認証あたりで少しはまりました。  
+正しい手順はよく分かってないですがいろいろ試したらうまくいきました。  
 
 ### デプロイ手順
 1. `git clone https://github.com/radiodio/ReviewCounter.git`
