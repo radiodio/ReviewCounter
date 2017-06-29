@@ -10,9 +10,11 @@ namespace ReviewCounter.Models
     {
         public int Id { get; set; }
         public Review Review { get; set; }
+        [Display(Name = "レビュア")]
         public Member Member { get; set; }
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
+        [Display(Name = "時間(分)")]
         public int Time { get; set; }
     }
 }

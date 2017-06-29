@@ -133,17 +133,27 @@ namespace ReviewCounter.Controllers
             {
                 streamWriter.WriteLine("Project,Version,Backlog,ProcessOutput,Reviewee,Reviewer,Date,Time");
 
+                StringBuilder sb = new StringBuilder();
                 foreach (var item in list)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append(item.Version).Append(",")
+                    sb.Append(item.Project).Append(",")
+                        .Append(item.Version).Append(",")
                         .Append(item.Backlog).Append(",")
                         .Append(item.ProcessOutput).Append(",")
                         .Append(item.Reviewee).Append(",")
                         .Append(item.Reviewer).Append(",")
                         .Append(item.Date).Append(",").Append(item.Time);
-                    streamWriter.WriteLine(sb.ToString());    
+                    streamWriter.WriteLine(sb.ToString());
+                    sb.Clear();
                 }
+                sb.Append(",")
+                    .Append(",")
+                    .Append(",")
+                    .Append(",")
+                    .Append(",")
+                    .Append(",").Append("Sum(min)")
+                    .Append(",").Append(list.Sum(x => x.Time));
+                streamWriter.WriteLine(sb.ToString());
             }
             byte[] fileBytes = System.IO.File.ReadAllBytes(path);
             return File(fileBytes, "application/x-msdownload", path);
